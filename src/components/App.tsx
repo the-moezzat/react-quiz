@@ -9,6 +9,7 @@ import Question from './Question';
 import Progress from './Progress';
 import NextButton from './NextButton';
 import FinishScreen from './FinishScreen';
+import Timer from './Timer';
 
 function reducer(state: InitState, action: IAction): InitState {
   switch (action.type) {
@@ -27,12 +28,13 @@ function reducer(state: InitState, action: IAction): InitState {
       return {
         ...state,
         status: 'active',
+        remainingSeconds: state.questions.length * 30,
       };
     case StateTypes.ANSWER:
       // const correct = state.questions[state.currentQuestion].
       return {
         ...state,
-        selectedAnswer: action.payload as number,
+        selectedAnswers: action.payload as number,
         score:
           state.questions[state.currentQuestion].correctOption ===
           action.payload
@@ -42,7 +44,7 @@ function reducer(state: InitState, action: IAction): InitState {
     case StateTypes.NEXT:
       return {
         ...state,
-        selectedAnswer: null,
+        selectedAnswers: null,
         currentQuestion: state.currentQuestion + 1,
       };
     case StateTypes.FINISH:
@@ -53,11 +55,16 @@ function reducer(state: InitState, action: IAction): InitState {
       };
     case StateTypes.RESTART:
       return {
-        ...state,
-        currentQuestion: 0,
+        ...initState,
         status: 'ready',
-        selectedAnswer: null,
-        score: 0,
+        highScore: state.highScore,
+        questions: state.questions,
+      };
+    case StateTypes.TICK:
+      return {
+        ...state,
+        remainingSeconds: state.remainingSeconds - 1,
+        status: state.remainingSeconds === 0 ? 'finished' : 'active',
       };
     default:
       throw new Error('Wrong action type');
@@ -68,14 +75,23 @@ const initState: InitState = {
   questions: [],
   status: 'loading',
   currentQuestion: 0,
-  selectedAnswer: null,
+  selectedAnswers: null,
   score: 0,
   highScore: 0,
+  remainingSeconds: 0,
 };
 
 function App() {
   const [
-    { questions, status, currentQuestion, selectedAnswer, score, highScore },
+    {
+      questions,
+      status,
+      currentQuestion,
+      selectedAnswers: selectedAnswer,
+      score,
+      highScore,
+      remainingSeconds,
+    },
     dispatch,
   ] = useReducer(reducer, initState);
 
@@ -118,13 +134,15 @@ function App() {
               dispatch={dispatch}
               answer={selectedAnswer}
             />
-
-            <NextButton
-              dispatch={dispatch}
-              answer={selectedAnswer}
-              currentQuestion={currentQuestion}
-              numQuestions={questions.length}
-            />
+            <footer>
+              <NextButton
+                dispatch={dispatch}
+                answer={selectedAnswer}
+                currentQuestion={currentQuestion}
+                numQuestions={questions.length}
+              />
+              <Timer dispatch={dispatch} remainingSeconds={remainingSeconds} />
+            </footer>
           </>
         )}
         {status === 'finished' && (

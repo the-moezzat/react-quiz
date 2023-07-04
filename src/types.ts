@@ -6,6 +6,7 @@ export enum StateTypes {
   NEXT = 'NEXT',
   FINISH = 'FINISH',
   RESTART = 'RESTART',
+  TICK = 'TICK',
 }
 
 export interface IQuestion {
@@ -26,7 +27,8 @@ export interface InitState {
   questions: IQuestion[];
   status: AppStatus;
   currentQuestion: number;
-  selectedAnswer: number | null;
+  selectedAnswers: number | null;
   score: number;
   highScore: number;
+  remainingSeconds: number;
 }
