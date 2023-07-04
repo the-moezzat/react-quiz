@@ -7,9 +7,9 @@ function Options({
 }: {
   question: IQuestion;
   dispatch: (action: IAction) => void;
-  answer: number | null;
+  answer: number | undefined;
 }) {
-  const isAnswered = answer !== null;
+  const isAnswered = answer !== undefined;
   return (
     <div className=" options">
       {question.options.map((option, index) => (

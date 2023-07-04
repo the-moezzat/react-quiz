@@ -8,7 +8,7 @@ function Question({
 }: {
   question: IQuestion;
   dispatch: (action: IAction) => void;
-  answer: number | null;
+  answer: number | undefined;
 }) {
   return (
     <div>

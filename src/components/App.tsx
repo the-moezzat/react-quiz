@@ -10,6 +10,7 @@ import Progress from './Progress';
 import NextButton from './NextButton';
 import FinishScreen from './FinishScreen';
 import Timer from './Timer';
+import Button from './Button';
 
 function reducer(state: InitState, action: IAction): InitState {
   switch (action.type) {
@@ -31,10 +32,9 @@ function reducer(state: InitState, action: IAction): InitState {
         remainingSeconds: state.questions.length * 30,
       };
     case StateTypes.ANSWER:
-      // const correct = state.questions[state.currentQuestion].
       return {
         ...state,
-        selectedAnswers: action.payload as number,
+        selectedAnswers: [...state.selectedAnswers, action.payload as number],
         score:
           state.questions[state.currentQuestion].correctOption ===
           action.payload
@@ -44,8 +44,13 @@ function reducer(state: InitState, action: IAction): InitState {
     case StateTypes.NEXT:
       return {
         ...state,
-        selectedAnswers: null,
+        // selectedAnswers: [],
         currentQuestion: state.currentQuestion + 1,
+      };
+    case StateTypes.PREV:
+      return {
+        ...state,
+        currentQuestion: state.currentQuestion - 1,
       };
     case StateTypes.FINISH:
       return {
@@ -75,7 +80,7 @@ const initState: InitState = {
   questions: [],
   status: 'loading',
   currentQuestion: 0,
-  selectedAnswers: null,
+  selectedAnswers: [],
   score: 0,
   highScore: 0,
   remainingSeconds: 0,
@@ -123,7 +128,7 @@ function App() {
         {status === 'active' && (
           <>
             <Progress
-              answer={selectedAnswer}
+              answer={selectedAnswer[currentQuestion]}
               currentQuestion={currentQuestion}
               numQuestions={questions.length}
               currentScore={score}
@@ -132,16 +137,22 @@ function App() {
             <Question
               question={questions[currentQuestion]}
               dispatch={dispatch}
-              answer={selectedAnswer}
+              answer={selectedAnswer[currentQuestion]}
             />
-            <footer>
+            <footer className="footer">
+              {currentQuestion > 0 && (
+                <Button
+                  onClick={() => dispatch({ type: StateTypes.PREV })}
+                  text="Previous"
+                />
+              )}
+              <Timer dispatch={dispatch} remainingSeconds={remainingSeconds} />
               <NextButton
                 dispatch={dispatch}
-                answer={selectedAnswer}
+                answer={selectedAnswer[currentQuestion]}
                 currentQuestion={currentQuestion}
                 numQuestions={questions.length}
               />
-              <Timer dispatch={dispatch} remainingSeconds={remainingSeconds} />
             </footer>
           </>
         )}

@@ -1,33 +1,22 @@
 import { StateTypes } from '../types';
+import Button from './Button';
 
 function NextButton({ dispatch, answer, currentQuestion, numQuestions }) {
-  const isAnswered = answer !== null;
+  const isAnswered = answer === undefined;
 
   return (
     <div>
-      {currentQuestion < numQuestions - 1 && isAnswered && (
-        <button
-          className=" btn btn-ui"
+      {currentQuestion < numQuestions - 1 && !isAnswered && (
+        <Button
           onClick={() => dispatch({ type: StateTypes.NEXT })}
-        >
-          Next
-        </button>
+          text="Next"
+        />
       )}
       {currentQuestion === numQuestions - 1 && (
-        <button
-          className="btn btn-ui"
+        <Button
           onClick={() => dispatch({ type: StateTypes.FINISH })}
-        >
-          Finish
-        </button>
-      )}
-      {currentQuestion > 0 && (
-        <button
-          className=" btn btn-ui"
-          onClick={() => dispatch({ type: StateTypes.NEXT })}
-        >
-          Previous
-        </button>
+          text="Finish"
+        />
       )}
     </div>
   );

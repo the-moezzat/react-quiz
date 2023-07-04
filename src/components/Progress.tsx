@@ -16,7 +16,7 @@ function Progress({
     <header className="progress">
       <progress
         max={numQuestions}
-        value={currentQuestion + Number(answer !== null)}
+        value={currentQuestion + Number(answer !== undefined)}
       />
       <p>
         Question <strong>{currentQuestion + 1}</strong> / {numQuestions}
