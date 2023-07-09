@@ -1,28 +1,22 @@
-interface IProgress {
-  currentQuestion: number;
-  numQuestions: number;
-  currentScore: number;
-  maxScore: number;
-  answer: number | null;
-}
-function Progress({
-  currentQuestion,
-  numQuestions,
-  currentScore,
-  maxScore,
-  answer,
-}: IProgress) {
+import { useQuiz } from '../context/QuizContext';
+
+function Progress() {
+  const { currentQuestion, questions, score, maxScore, selectedAnswers } =
+    useQuiz();
   return (
     <header className="progress">
       <progress
-        max={numQuestions}
-        value={currentQuestion + Number(answer !== undefined)}
+        max={questions.length}
+        value={
+          currentQuestion +
+          Number(selectedAnswers[currentQuestion] !== undefined)
+        }
       />
       <p>
-        Question <strong>{currentQuestion + 1}</strong> / {numQuestions}
+        Question <strong>{currentQuestion + 1}</strong> / {questions.length}
       </p>
       <p>
-        {currentScore} / {maxScore}
+        {score} / {maxScore}
       </p>
     </header>
   );

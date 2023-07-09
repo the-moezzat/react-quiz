@@ -1,20 +1,13 @@
-import { IAction, StateTypes } from '../types';
+import { useQuiz } from '../context/QuizContext';
 
-function StartScreen({
-  numQuestions,
-  dispatch,
-}: {
-  numQuestions: number;
-  dispatch: (action: IAction) => void;
-}) {
+function StartScreen() {
+  const { questions, startApp } = useQuiz();
+
   return (
     <div className="start">
       <h2>Welcome to the React Quiz!</h2>
-      <h3>{numQuestions} Questions to test your react mastery</h3>
-      <button
-        className="btn btn-ui"
-        onClick={() => dispatch({ type: StateTypes.START })}
-      >
+      <h3>{questions.length} Questions to test your react mastery</h3>
+      <button className="btn btn-ui" onClick={startApp}>
         let's start
       </button>
     </div>

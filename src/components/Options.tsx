@@ -1,24 +1,22 @@
-import { IAction, IQuestion, StateTypes } from '../types';
+import { useQuiz } from '../context/QuizContext';
 
-function Options({
-  question,
-  dispatch,
-  answer,
-}: {
-  question: IQuestion;
-  dispatch: (action: IAction) => void;
-  answer: number | undefined;
-}) {
+function Options() {
+  const { questions, answerQuestion, currentQuestion, selectedAnswers } =
+    useQuiz();
+  const answer = selectedAnswers[currentQuestion];
+
   const isAnswered = answer !== undefined;
   return (
     <div className=" options">
-      {question.options.map((option, index) => (
+      {questions[currentQuestion].options.map((option, index) => (
         <button
           key={option}
-          onClick={() => dispatch({ type: StateTypes.ANSWER, payload: index })}
+          onClick={() => answerQuestion(index)}
           className={`btn btn-option ${index === answer ? 'answer' : ''} ${
             isAnswered &&
-            (index === question.correctOption ? 'correct' : 'wrong')
+            (index === questions[currentQuestion].correctOption
+              ? 'correct'
+              : 'wrong')
           }`}
           disabled={isAnswered}
         >

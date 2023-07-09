@@ -1,19 +1,12 @@
-import { IAction, IQuestion } from '../types';
+import { useQuiz } from '../context/QuizContext';
 import Options from './Options';
 
-function Question({
-  question,
-  dispatch,
-  answer,
-}: {
-  question: IQuestion;
-  dispatch: (action: IAction) => void;
-  answer: number | undefined;
-}) {
+function Question() {
+  const { questions, currentQuestion } = useQuiz();
   return (
     <div>
-      <h4>{question.question}</h4>
-      <Options question={question} dispatch={dispatch} answer={answer} />
+      <h4>{questions[currentQuestion].question}</h4>
+      <Options />
     </div>
   );
 }

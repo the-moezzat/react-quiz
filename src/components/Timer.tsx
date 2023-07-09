@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
-import { StateTypes } from '../types';
+import { useQuiz } from '../context/QuizContext';
 
-function Timer({ dispatch, remainingSeconds }) {
+function Timer() {
+  // dispatch={dispatch} remainingSeconds={remainingSeconds}
+  const { remainingSeconds, handleTick } = useQuiz();
+
   const minutes = Math.floor(remainingSeconds / 60)
     .toString()
     .padStart(2, '0');
@@ -9,12 +12,11 @@ function Timer({ dispatch, remainingSeconds }) {
   useEffect(
     function () {
       const id = setInterval(function () {
-        dispatch({ type: StateTypes.TICK });
+        handleTick();
       }, 1000);
-
       return () => clearInterval(id);
     },
-    [dispatch]
+    [handleTick]
   );
   return (
     <div className="timer">

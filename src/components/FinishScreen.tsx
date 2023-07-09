@@ -1,6 +1,8 @@
+import { useQuiz } from '../context/QuizContext';
 import { StateTypes } from '../types';
 
-function FinishScreen({ score, maxScore, highScore, dispatch }) {
+function FinishScreen() {
+  const { score, maxScore, highScore, handleRestart } = useQuiz();
   return (
     <>
       <p className=" result">
@@ -8,10 +10,7 @@ function FinishScreen({ score, maxScore, highScore, dispatch }) {
         {((score / maxScore) * 100).toFixed(0)}%)
       </p>
       <p className="highscore">(High score: {highScore} points)</p>
-      <button
-        className="btn btn-ui"
-        onClick={() => dispatch({ type: StateTypes.RESTART })}
-      >
+      <button className="btn btn-ui" onClick={handleRestart}>
         Restart Quiz
       </button>
     </>

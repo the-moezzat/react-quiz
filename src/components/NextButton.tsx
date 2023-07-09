@@ -1,22 +1,24 @@
-import { StateTypes } from '../types';
+import { useQuiz } from '../context/QuizContext';
 import Button from './Button';
 
-function NextButton({ dispatch, answer, currentQuestion, numQuestions }) {
-  const isAnswered = answer === undefined;
+function NextButton() {
+  const {
+    handleNext,
+    handleFinish,
+    currentQuestion,
+    questions,
+    selectedAnswers,
+  } = useQuiz();
+
+  const isAnswered = selectedAnswers[currentQuestion] === undefined;
 
   return (
     <div>
-      {currentQuestion < numQuestions - 1 && !isAnswered && (
-        <Button
-          onClick={() => dispatch({ type: StateTypes.NEXT })}
-          text="Next"
-        />
+      {currentQuestion < questions.length - 1 && !isAnswered && (
+        <Button onClick={handleNext} text="Next" />
       )}
-      {currentQuestion === numQuestions - 1 && (
-        <Button
-          onClick={() => dispatch({ type: StateTypes.FINISH })}
-          text="Finish"
-        />
+      {currentQuestion === questions.length - 1 && (
+        <Button onClick={handleFinish} text="Finish" />
       )}
     </div>
   );
